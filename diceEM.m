@@ -45,17 +45,6 @@ diceEMIterator[binCountsList_, numFaces_, initParams_, maxIterations_,
    
   oldParamEstimates = initParams;
   
-  (*Loop here until either maxIterations has been reached or the \
-	accuracy goal has been met.The accuracy goal is met when the sum,
-  	over all estimated parameters,
-	of the absolute values of the changes from one iteration to the \
-	next is less than accuracy.*)(*I suggest using Do to iterate here.On \
-	each iteration,call updateProbs,passing in the old values,
-  	to set the new values.Then test whether the termination conditions \
-	have been met (Break[] breaks a loop).Finally,
-  	if termination conditions have not been met,
-  	set old values to be the same as the new values.*)
-  	
   Do[newParamEstimates = 
     updateProbs[binCountsList, oldParamEstimates]; 
    If[Total[Flatten[Abs[newParamEstimates - oldParamEstimates]]] < 
@@ -65,7 +54,6 @@ diceEMIterator[binCountsList_, numFaces_, initParams_, maxIterations_,
    if the total change in parameters is less than the assigned accuracy. Flatten is used to eliminate all sublists within the parameter
    estimates so I can nicely subtract them from one another*)
    
-  (*At the end,return the estimated parameters with the less likely die first.*)
   
   If[type1Prob[newParamEstimates] <= type2Prob[newParamEstimates], 
    newParamEstimates, {type2Prob[newParamEstimates], 
@@ -74,7 +62,6 @@ diceEMIterator[binCountsList_, numFaces_, initParams_, maxIterations_,
     
 ]
    
-(* updateProbs does the actual EM calculations. Implementing this is your main task. *)
 updateProbs[binCountsList_, oldParamEstimates_, debug_:False] :=
 	Module[{posteriors,
 		    (* type1Count and type2Count are the expected number of times a type1 or type2
@@ -104,9 +91,6 @@ updateProbs[binCountsList_, oldParamEstimates_, debug_:False] :=
 		   return these estimates in a list: {newType1Prob, newType2Prob, newFaceProbs1, newFaceProbs2} *)
 	] 
 
-(* Make sure to include your diceSample and dicePosterior functions here. If yours don't work get working
-   copies from the TAs. *)
-   
  diceSample[numType1_, numType2_, type1_, type2_, draws_, rollsPerDraw_] :=
  Module[{ die1 = EmpiricalDistribution[type1 -> Range[4]], 
   die2 = EmpiricalDistribution[type2 -> Range[4]],
@@ -130,9 +114,6 @@ Module[{changeZeroes, getDieChance},
    type1Prior]/(getDieChance[changeZeroes[faceProbs1], type1Prior] + 
     getDieChance[changeZeroes[faceProbs2], type2Prior])]
     (*Here I call all my functions, using exhaustive conditionalizing to find bayes solution*)
-
-(*myRound is a hack to get around a problem with rounding numbers in \
-Mathematica. Please don't bother to try to understand it.*)
 
 myRound[x_, n_] :=
   N[IntegerPart[Round[x,10^-n]*10^n] / 10^n];
