@@ -20,9 +20,6 @@
 		  Each entry in the resulting binCountsList should be a list of the face frequencies from one trial.
 		  E.g., if there are four faces on the dice, one entry might be {3, 0, 1, 1}, indicating 
 		  that on this trial face 1 was rolled 3 times, face 2 was not rolled at all, etc.  *)
-	    (* Initialize initialFaceProbs1 and initialFaceProbs2 here. Use RandomReal and make it so
-	       so that all entries are within a factor of two of one another. The built in functions
-	       Normalize and Total may also be useful here. *)
 	    binCountsList = Map[BinCounts[#, {Range[numFaces + 1]}] &, trials];
 	    (*binCountsList sums up all the values in each sublist that are the integer values of Range[numFaces]. In binCount, numFaces+1
 	    is used to make sure that the last bound is catched by the algorithm and thus the last face is counted*)
